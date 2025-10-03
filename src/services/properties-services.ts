@@ -28,16 +28,21 @@ const getPropertyByIdService = async (id:number) => {
 };
 
 // P8 FIX: Altera a assinatura para Omit<PropertyModel, "id"> e lida com o novo retorno (ID)
-const createPropertyService = async(property: Omit<PropertyModel, "id">) => {
+const createPropertyService = async(property: Omit<PropertyModel, "id" | "imovel_id">) => { // CORRIGIDO
     let response: HttpResponse;
     
     if(Object.keys(property).length != 0) {
-        const newId = await propertiesRepository.insertProperty(property as any)
+        try {
+            const newSistemaId = await propertiesRepository.insertProperty(property as any)
 
-        if (newId) {
-            response = await httpResponse.created({ id: newId, message: "Property created successfully" });
-        } else {
-             response = await httpResponse.badRequest({ message: "Failed to insert property" });
+            if (newSistemaId) {
+                response = await httpResponse.created({ id: newSistemaId, message: "Property created successfully" });
+            } else {
+                 response = await httpResponse.badRequest({ message: "Failed to insert property" });
+            }
+        } catch (error) {
+            console.error("Erro no serviço de criação:", error);
+            response = await httpResponse.internalServerError({ message: "Erro interno do servidor ao criar a propriedade." });
         }
 
     } else {

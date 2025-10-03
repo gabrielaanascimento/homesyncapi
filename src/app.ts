@@ -13,21 +13,23 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const PORT = process.env.PORT || 3000;
+
 // Linha app.use() vazia removida.
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Hello World');
 });
 
-app.use('/corretor', usersRoutes);
+app.use('/corretor/', usersRoutes);
 
-app.use('/imovel', propertiesRoutes);
+app.use('/imovel/', propertiesRoutes);
 
 app.use('/auth/', authRoutes);
 
 app.use('/chat/', chatRoutes);
 
 
-app.listen(3000, () => {
-    console.log('http://localhost:3000');
+app.listen(PORT , () => {
+    console.log('http://localhost:' + PORT);
 });
