@@ -25,7 +25,7 @@ const findPropertyById = async (id: number): Promise<PropertyModel | null> => {
     const query = `
         SELECT ${ALL_FIELDS} FROM ${TABLE_NAME_SISTEMA} s
         INNER JOIN ${TABLE_NAME_IMOVEIS} i ON s.imovel_id = i.id
-        WHERE s.id = $1
+        WHERE s.imovel_id = $1 AND s.status = 'Disponível'
     `;
     const result = await db.query(query, [id]);
     return result.rows[0] || null;

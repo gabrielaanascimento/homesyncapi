@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import * as PropertyService from '../services/properties-services';
 import { AuthRequest } from '../../middlewares/auth-middlewares';
+import { internalServerError } from '../utils/http-help';
 
 
 export const PropertiesController = {
@@ -42,10 +43,18 @@ export const PropertiesController = {
     const imovelId = Number(req.params.id);
     const files = req.files as Express.Multer.File[]; // Multer define req.files como um array para .array()
 
+    console.log(`[DEBUG UPLOAD] Imóvel ID (Sistema): ${imovelId}`);
+    // Loga os arquivos recebidos. Se for [], o cliente não enviou ou o Multer falhou.
+    console.log(`[DEBUG UPLOAD] Arquivos recebidos:`, files); 
+
     if (!imovelId) {
         return res.status(400).json({ success: false, message: 'O ID do imóvel é obrigatório.' });
     }
+    
     if (!files || files.length === 0) {
+        // CORREÇÃO DE FLUXO: Se o Multer falhou sem um MulterError (ou se o cliente enviou 0 arquivos), 
+        // a rota continua, e o controller deve retornar 400.
+        console.error('[DEBUG UPLOAD] Erro: Nenhuma imagem recebida no controller (files.length é 0).');
         return res.status(400).json({ success: false, message: 'Nenhuma imagem foi enviada.' });
     }
     
@@ -53,13 +62,13 @@ export const PropertiesController = {
     const filePaths = files.map(file => file.path);
 
     try {
-        // Nota: Idealmente, o serviço deve verificar a existência do imóvel
         const httpResponse = await PropertyService.insertImovelImagesService(imovelId, filePaths);
         return res.status(httpResponse.statusCode).json(httpResponse.body);
 
     } catch (error) {
         console.error('Erro ao fazer upload de imagens:', error);
-        return res.status(500).json({ success: false, message: 'Erro interno do servidor ao salvar imagens.' });
+        const internalError = await internalServerError('Erro interno do servidor ao salvar imagens.');
+        return res.status(internalError.statusCode).json(internalError.body);
     }
   }
 };
