@@ -10,4 +10,7 @@ export interface PropertyModel {
     andar?: number;
     preco?: number;
     descricao?: string;
+
+    imovel_id: number;
+
 }

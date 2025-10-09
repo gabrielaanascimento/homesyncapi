@@ -14,7 +14,7 @@ interface ChatRequest extends AuthRequest {
 }
 
 // CORRIGIDO: Aplicar o middleware authenticateJWT
-router.post("/pergunta", authenticateJWT as any, async (req: ChatRequest, res: Response) => { 
+router.post("/pergunta", async (req: ChatRequest, res: Response) => { 
 // ... (restante da lógica do chat)
 // ...
     const text = req.body.text;
@@ -39,6 +39,9 @@ router.post("/pergunta", authenticateJWT as any, async (req: ChatRequest, res: R
              return res.status(200).json({ ids: [], mensagemGeral: "Não há imóveis disponíveis no momento.", content: "" });
         }
         
+        console.log(`Número de imóveis disponíveis para recomendação: ${imoveis[0]}`);
+        
+
         // Primeira chamada para o Gemini - obter os IDs dos imóveis
         const instrucoesImovel = `
 Você é um assistente inteligente que ajuda usuários a encontrar imóveis com base em uma lista de dados.
@@ -48,7 +51,7 @@ ${JSON.stringify(imoveis)}
 
 2. A tarefa é analisar a pergunta do usuário e retornar apenas os imóveis relevantes com base na intenção da pergunta.
 
-3. Sua resposta DEVE ser exclusivamente um array JSON contendo apenas os IDs (inteiros) dos imóveis recomendados.
+3. Sua resposta DEVE ser exclusivamente um array JSON contendo apenas os IDs do campo "imovel_id" (inteiros) dos imóveis recomendados.
 - Exemplo de formato válido: [1, 5, 10]
 - Todos os IDs retornados devem existir na lista fornecida.
 

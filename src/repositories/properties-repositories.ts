@@ -5,7 +5,7 @@ import { db } from "../data/database";
 const ALL_FIELDS = `
     s.id, s.imovel_id, s.corretor_id, s.cliente_vendedor_id, s.status,
     i.nome, i.valor, i.destaques, i.local, i.quartos, i.area, i.tipo_imovel, i.endereco, i.area_construida, i.andar, i.descricao
-`;
+`; // CORREÇÃO: Removido 'i.image' daqui para evitar o erro "column does not exist" nas queries de SELECT
 const TABLE_NAME_SISTEMA = 'sistema_imoveis';
 const TABLE_NAME_IMOVEIS = 'imoveis';
 
@@ -21,22 +21,17 @@ const findAllProperties = async (queryLimit: number, queryOffset: number): Promi
 }
 
 const findPropertyById = async (id: number): Promise<PropertyModel | null> => {
-    // JOIN obrigatório
+    // ID Correto: Busca pelo ID do sistema (s.id)
     const query = `
         SELECT ${ALL_FIELDS} FROM ${TABLE_NAME_SISTEMA} s
         INNER JOIN ${TABLE_NAME_IMOVEIS} i ON s.imovel_id = i.id
-        WHERE s.id = $1
+        WHERE s.id = $1 AND s.status = 'Disponível'
     `;
     const result = await db.query(query, [id]);
     return result.rows[0] || null;
 }
 
 const updatePropertyById = async (id: number, propertyData: Partial<PropertyModel>): Promise<PropertyModel | null> => {
-    // Nota: O Multer usa o método updateUserService, não este.
-    // Esta função precisaria de lógica complexa para separar os campos de 's' e 'i' e rodar 2 UPDATES.
-    // Para manter a API operacional e focar na inserção, este UPDATE será mantido simplificado (apenas 's.status' e FKs).
-    // Para atualização de campos descritivos (nome, valor, etc.), seria necessário um novo service/controller.
-    
     // Simplificando o UPDATE para atualizar apenas o status (campo principal de sistema_imoveis)
     if (propertyData.status) {
         await db.query(`UPDATE ${TABLE_NAME_SISTEMA} SET status = $1 WHERE id = $2`, [propertyData.status, id]);
@@ -87,30 +82,54 @@ const insertProperty = async (newProperty: Omit<PropertyModel, "id" | "imovel_id
 }
 
 const deletePropertyById = async (id: number): Promise<boolean> => {
-    // Para deletar o item, precisamos deletar a negociação em 's' e, opcionalmente, o catálogo em 'i'.
-    // Com ON DELETE CASCADE na FK, deletar o item em 'i' deleta em 's'. Deletar 's' não deleta 'i'.
     // A melhor prática é deletar a negociação 's' e manter o catálogo 'i' (a menos que seja especificado o contrário).
-    
     const result = await db.query(`DELETE FROM ${TABLE_NAME_SISTEMA} WHERE id = $1`, [id]);
     return (result.rowCount ?? 0) > 0;
 }
 
 const insertImovelImages = async (imovelId: number, filePaths: string[]): Promise<boolean> => {
-    if (filePaths.length === 0) return false;
+    const client = await db.connect();
+    if (filePaths.length === 0) {
+        client.release();
+        return false;
+    }
 
-    // Constrói a query para inserir múltiplas linhas: (imovel_id, caminho)
-    // O $1 é o imovelId, e $2, $3, etc., são os filePaths
-    const values = filePaths.map((_, index) => `($1, $${index + 2})`).join(', ');
-    const query = `
-        INSERT INTO imagens_imovel (imovel_id, caminho) 
-        VALUES ${values}
-        RETURNING id;
-    `;
-    
-    // O array de parâmetros contém o imovelId seguido de todos os caminhos dos arquivos
-    const result = await db.query(query, [imovelId, ...filePaths]);
-    
-    return (result.rowCount ?? 0) > 0;
+    try {
+        await client.query('BEGIN');
+        const firstImagePath = filePaths[0]; // Pega a primeira imagem para o campo principal
+        
+        // 1. Inserir todos os caminhos na tabela de imagens (imagens_imovel)
+        const values = filePaths.map((_, index) => `($1, $${index + 2})`).join(', ');
+        const queryInsert = `
+            INSERT INTO imagens_imovel (imovel_id, caminho) 
+            VALUES ${values}
+            RETURNING id;
+        `;
+        const resultInsert = await client.query(queryInsert, [imovelId, ...filePaths]);
+        
+        // 2. ATUALIZA A COLUNA 'image' na tabela principal 'imoveis'
+        const queryUpdate = `
+            UPDATE ${TABLE_NAME_IMOVEIS}
+            SET image = $1
+            WHERE id = $2;
+        `;
+        
+        // ESTE É O PONTO DE FALHA (CRASH) QUE VOCÊ ESTÁ VENDO
+        // Ele continuará a falhar até que a coluna 'image' seja adicionada no DB.
+        await client.query(queryUpdate, [firstImagePath, imovelId]); 
+        
+        await client.query('COMMIT');
+
+        return (resultInsert.rowCount ?? 0) > 0;
+
+    } catch (error) {
+        await client.query('ROLLBACK');
+        // Mensagem de erro para guiar o próximo passo do usuário
+        console.error("Transação de inserção de imagens falhou (Adicione a coluna 'image' na tabela 'imoveis'):", error);
+        throw error; 
+    } finally {
+        client.release();
+    }
 }
 
 export {
