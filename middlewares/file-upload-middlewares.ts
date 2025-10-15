@@ -1,13 +1,14 @@
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import os from 'os'; // Import the 'os' module
 import { Request } from 'express';
-import { AuthRequest } from './auth-middlewares.js'; // 1. NOVO IMPORT
+import { AuthRequest } from './auth-middlewares.js';
 
 // --- Configuração ---
 
-// Define o diretório base (no mesmo nível de 'src')
-const UPLOAD_DIR = path.join(process.cwd(), 'uploads'); 
+// Define o diretório base na pasta temporária do sistema
+const UPLOAD_DIR = path.join(os.tmpdir(), 'uploads');
 const CORRETORES_DIR = path.join(UPLOAD_DIR, 'corretores');
 const IMOVEIS_DIR = path.join(UPLOAD_DIR, 'imoveis');
 
@@ -25,12 +26,12 @@ const storageCorretores = multer.diskStorage({
         cb(null, CORRETORES_DIR);
     },
     // 2. USO DA INTERFACE AuthRequest PARA TIPAGEM
-    filename: (req: AuthRequest, file, cb) => { 
+    filename: (req: AuthRequest, file, cb) => {
         // Usa o ID do usuário (se autenticado) ou um sufixo único
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
         const fileExtension = path.extname(file.originalname);
         const userId = req.user?.userId; // O 'as any' foi removido
-        
+
         const fileName = `corretor-${userId || uniqueSuffix}${fileExtension}`;
         cb(null, fileName);
     }
