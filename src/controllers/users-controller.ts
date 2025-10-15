@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import * as service from "../services/users-services";
-import { noContent } from "../utils/http-help";
-import { HttpResponse } from "../models/http-response-models";
-import { CorretorModel } from "../models/users-models"; // CORRIGIDO
-import { AuthRequest } from '../../middlewares/auth-middlewares'; 
+import * as service from "../services/users-services.js";
+import { noContent } from "../utils/http-help.js";
+import { HttpResponse } from "../models/http-response-models.js";
+import { CorretorModel } from "../models/users-models.js"; // CORRIGIDO
+import { AuthRequest } from '../../middlewares/auth-middlewares.js'; 
 
 
 export const getUser = async (req:Request, res:Response) => {

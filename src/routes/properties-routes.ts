@@ -1,8 +1,8 @@
 // gabrielaanascimento/homesyncapi/homesyncapi-bc08270db04b9abb8982f5425eb1a72fa05c8c11/src/routes/properties-routes.ts
 import { Router } from 'express';
-import { PropertiesController } from '../controllers/properties-controller';
-import { authenticateJWT } from '../../middlewares/auth-middlewares';
-import { uploadImovelImages } from '../../middlewares/file-upload-middlewares'; // NOVO IMPORT
+import { PropertiesController } from '../controllers/properties-controller.js';
+import { authenticateJWT } from '../../middlewares/auth-middlewares.js';
+import { uploadImovelImages } from '../../middlewares/file-upload-middlewares.js'; // NOVO IMPORT
 import { Request, Response, NextFunction } from 'express'; // NOVO
 import multer from 'multer'; // NOVO: Para tratamento de erros específicos do Multer
 

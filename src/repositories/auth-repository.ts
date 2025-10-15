@@ -1,5 +1,5 @@
-import { db } from "../data/database";
-import { AuthCorretorModel } from "../models/users-models";
+import { db } from "../data/database.js";
+import { AuthCorretorModel } from "../models/users-models.js";
 
 // Tabela 'usuarios' substituída por 'corretores'
 const findUserByEmail = async (email: string): Promise<AuthCorretorModel | null> => {

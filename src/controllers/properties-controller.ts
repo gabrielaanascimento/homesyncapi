@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import * as PropertyService from '../services/properties-services';
-import { AuthRequest } from '../../middlewares/auth-middlewares';
-import { internalServerError } from '../utils/http-help';
+import * as PropertyService from '../services/properties-services.js';
+import { AuthRequest } from '../../middlewares/auth-middlewares.js';
+import { internalServerError } from '../utils/http-help.js';
 
 
 export const PropertiesController = {

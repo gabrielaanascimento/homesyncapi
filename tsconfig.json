@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
+    "target": "es2022", // Atualizado para suportar o Node.js v22.x
+    "module": "nodenext", // MUDE para nodeNext
     "strict": true,
     "esModuleInterop": true,
     "outDir": "./dist",

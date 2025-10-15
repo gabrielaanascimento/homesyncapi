@@ -2,7 +2,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { Request } from 'express';
-import { AuthRequest } from './auth-middlewares'; // 1. NOVO IMPORT
+import { AuthRequest } from './auth-middlewares.js'; // 1. NOVO IMPORT
 
 // --- Configuração ---
 

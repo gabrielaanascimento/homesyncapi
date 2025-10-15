@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { authenticateJWT, AuthRequest } from '../../middlewares/auth-middlewares'; // CORRIGIDO: Usar authenticateJWT
-import * as propertiesService from '../services/properties-services';
+import { authenticateJWT, AuthRequest } from '../../middlewares/auth-middlewares.js'; // CORRIGIDO: Usar authenticateJWT
+import * as propertiesService from '../services/properties-services.js';
 import env from "dotenv"
 env.config()
 

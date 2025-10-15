@@ -1,9 +1,9 @@
-import * as authRepository from "../repositories/auth-repository";
+import * as authRepository from "../repositories/auth-repository.js";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import * as httpResponse from "../utils/http-help";
-import { HttpResponse } from "../models/http-response-models";
-import { AuthCorretorModel } from "../models/users-models";
+import * as httpResponse from "../utils/http-help.js";
+import { HttpResponse } from "../models/http-response-models.js";
+import { AuthCorretorModel } from "../models/users-models.js";
 
 const SECRET_KEY = process.env.JWT_SECRET || "HNSHBCSBSBnkcskhcnsndncskcsnksncsnsns";
 

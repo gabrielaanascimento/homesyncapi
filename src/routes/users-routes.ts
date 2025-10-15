@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import * as UsersController from '../controllers/users-controller';
-import { authenticateJWT } from '../../middlewares/auth-middlewares';
-import { uploadCorretorPhoto } from '../../middlewares/file-upload-middlewares'; // NOVO IMPORT
+import * as UsersController from '../controllers/users-controller.js';
+import { authenticateJWT } from '../../middlewares/auth-middlewares.js';
+import { uploadCorretorPhoto } from '../../middlewares/file-upload-middlewares.js'; // NOVO IMPORT
 
 const router = Router();
 

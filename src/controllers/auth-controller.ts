@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import * as authService from "../services/auth-service";
+import * as authService from "../services/auth-service.js";
+
 
 export const login = async (req: Request, res: Response) => {
 // ... (lógica inalterada, mas o serviço agora busca e retorna o nome)

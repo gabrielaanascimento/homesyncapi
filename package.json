@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "tsx src/app.ts",
-    "start": "node --env-file.env"
+    "start": "node --env-file .env dist/src/app.js"
   },
   "type": "module",
   "keywords": [],

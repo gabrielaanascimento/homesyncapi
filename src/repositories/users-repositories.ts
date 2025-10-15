@@ -1,5 +1,5 @@
-import { CorretorModel } from "../models/users-models";
-import { db } from "../data/database";
+import { CorretorModel } from "../models/users-models.js";
+import { db } from "../data/database.js";
 
 // Atualizado com os novos campos (nome, vendas_anual, conversao_final, conversao_data)
 const CORRETOR_FIELDS = 'id, nome, email, creci, cpf, afiliacao, celular, descricao, avaliacao, vendas_anual, conversao_final, conversao_data, caracteristicas, foto';

@@ -1,8 +1,8 @@
 // gabrielaanascimento/homesyncapi/homesyncapi-bc08270db04b9abb8982f5425eb1a72fa05c8c11/src/services/properties-services.ts
-import * as httpResponse from "../utils/http-help";
-import * as propertiesRepository from "../repositories/properties-repositories";
-import { PropertyModel } from "../models/properties-models";
-import { HttpResponse } from "../models/http-response-models";
+import * as httpResponse from "../utils/http-help.js";
+import * as propertiesRepository from "../repositories/properties-repositories.js";
+import { PropertyModel } from "../models/properties-models.js";
+import { HttpResponse } from "../models/http-response-models.js";
 
 const getPropertiesService = async (queryLimit: number, queryOffset: number) => {
 // ... (lógica inalterada)

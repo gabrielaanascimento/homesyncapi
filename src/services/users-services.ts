@@ -1,7 +1,7 @@
-import * as httpResponse from "../utils/http-help";
-import * as userRepository from "../repositories/users-repositories";
-import { CorretorModel } from "../models/users-models"; // CORRIGIDO
-import { HttpResponse } from "../models/http-response-models";
+import * as httpResponse from "../utils/http-help.js";
+import * as userRepository from "../repositories/users-repositories.js";
+import { CorretorModel } from "../models/users-models.js"; // CORRIGIDO
+import { HttpResponse } from "../models/http-response-models.js";
 //Terminar de testar e implementar alguma nova função, caso necessário
 const getUserService = async () => {
     const dataUsers = await userRepository.findAllUsers();

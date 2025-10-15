@@ -1,17 +1,13 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = require("express");
-const properties_controller_1 = require("../controllers/properties-controller");
-const file_upload_middlewares_1 = require("../../middlewares/file-upload-middlewares"); // NOVO IMPORT
-const multer_1 = __importDefault(require("multer")); // NOVO: Para tratamento de erros específicos do Multer
-const router = (0, express_1.Router)();
+// gabrielaanascimento/homesyncapi/homesyncapi-bc08270db04b9abb8982f5425eb1a72fa05c8c11/src/routes/properties-routes.ts
+import { Router } from 'express';
+import { PropertiesController } from '../controllers/properties-controller.js';
+import { uploadImovelImages } from '../../middlewares/file-upload-middlewares.js'; // NOVO IMPORT
+import multer from 'multer'; // NOVO: Para tratamento de erros específicos do Multer
+const router = Router();
 // Função Wrapper para tratar erros do Multer (limites de arquivo, campos errados, etc.)
 const handleMulterError = (req, res, next) => {
-    (0, file_upload_middlewares_1.uploadImovelImages)(req, res, (err) => {
-        if (err instanceof multer_1.default.MulterError) {
+    uploadImovelImages(req, res, (err) => {
+        if (err instanceof multer.MulterError) {
             // Erros específicos do Multer (e.g., FILE_TOO_LARGE, LIMIT_UNEXPECTED_FILE)
             console.error("Multer Error:", err.code, err.message);
             // Retorna 400 ou outro código apropriado para erros de formato/limite
@@ -32,11 +28,11 @@ const handleMulterError = (req, res, next) => {
         next(); // Continua se o Multer processou a requisição sem erros.
     });
 };
-router.get('/imoveis/', properties_controller_1.PropertiesController.listAll);
-router.get('/imoveis/:id', properties_controller_1.PropertiesController.getById);
-// ROTA MODIFICADA: Usa handleMulterError para tratamento robusto
-router.post('/imoveis/:id/upload-images', handleMulterError, properties_controller_1.PropertiesController.uploadImovelImages);
-router.post('/imoveis/', properties_controller_1.PropertiesController.create);
-router.put('/imoveis/:id', properties_controller_1.PropertiesController.update);
-router.delete('/imoveis/:id', properties_controller_1.PropertiesController.remove);
-exports.default = router;
+router.get('/imoveis/', PropertiesController.listAll);
+router.get('/imoveis/:id', PropertiesController.getById);
+// CORREÇÃO: Adiciona authenticateJWT ANTES de handleMulterError
+router.post('/imoveis/:id/upload-images', handleMulterError, PropertiesController.uploadImovelImages);
+router.post('/imoveis/', PropertiesController.create);
+router.put('/imoveis/:id', PropertiesController.update);
+router.delete('/imoveis/:id', PropertiesController.remove);
+export default router;

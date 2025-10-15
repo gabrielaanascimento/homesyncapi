@@ -1,4 +1,4 @@
-import { HttpResponse } from "../models/http-response-models";
+import { HttpResponse } from "../models/http-response-models.js";
 //caso precise, implementar novas reponses
 // Terminar de aplicar esta padronização em todas as outras páginas
 const ok = async (data:any): Promise<HttpResponse> => {

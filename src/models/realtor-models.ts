@@ -1,4 +1,4 @@
-import { PropertyModel } from "./properties-models";
+import { PropertyModel } from "./properties-models.js";
 //Terminar esta página de models com mais informações
 //Realtor
 export interface RealtorUserModel {

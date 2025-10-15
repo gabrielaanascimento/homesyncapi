@@ -1,5 +1,5 @@
-import { PropertyModel } from "../models/properties-models";
-import { db } from "../data/database";
+import { PropertyModel } from "../models/properties-models.js";
+import { db } from "../data/database.js";
 
 // Tabela 'imoveis' (i) e 'sistema_imoveis' (s)
 const ALL_FIELDS = `

@@ -1,9 +1,9 @@
 import express from 'express';
 import cors from 'cors';
-import authRoutes from './routes/authRoutes';      
-import chatRoutes from './routes/chat'; 
-import propertiesRoutes from './routes/properties-routes';
-import usersRoutes from './routes/users-routes';
+import authRoutes from './routes/authRoutes.js';      
+import chatRoutes from './routes/chat.js'; 
+import propertiesRoutes from './routes/properties-routes.js';
+import usersRoutes from './routes/users-routes.js';
 import { Request, Response } from 'express';
 
 const app = express();
