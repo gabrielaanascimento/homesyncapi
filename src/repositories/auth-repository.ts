@@ -11,12 +11,12 @@ const findUserByEmail = async (email: string): Promise<AuthCorretorModel | null>
 };
 
 // Cadastro simples de corretor (incluindo 'nome')
-const insertNewUser = async (nome: string, email: string, senha: string, CRECI: string, CPF: string): Promise<AuthCorretorModel | null> => {
+const insertNewUser = async (nome: string, email: string, senha: string, CRECI: string, CPF: string, telefone: string): Promise<AuthCorretorModel | null> => {
     const result = await db.query(
-        `INSERT INTO corretores (nome, email, senha, creci, cpf)
-         VALUES ($1, $2, $3, $4, $5)
-         RETURNING id, nome, email, creci;`,
-        [nome, email, senha, CRECI, CPF]
+        `INSERT INTO corretores (nome, email, senha, creci, cpf, celular)
+         VALUES ($1, $2, $3, $4, $5, $6)
+         RETURNING id, nome, email, creci, celular;`,
+        [nome, email, senha, CRECI, CPF, telefone]
     );
     return result.rows[0] || null;
 };

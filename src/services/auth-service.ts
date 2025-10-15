@@ -44,10 +44,10 @@ const loginService = async (email: string, senha: string): Promise<HttpResponse>
 };
 
 // O cadastro agora exige 'nome'
-const registerService = async (nome: string, email: string, senha: string, CRECI: string, CPF: string): Promise<HttpResponse> => {
+const registerService = async (nome: string, email: string, senha: string, CRECI: string, CPF: string, telefone: string): Promise<HttpResponse> => {
     
-    if (!nome || !email || !senha || !CRECI || !CPF) {
-        return httpResponse.badRequest({ success: false, message: 'Nome, email, senha, CRECI e CPF são obrigatórios.' });
+    if (!nome || !email || !senha || !CRECI || !CPF || !telefone) {
+        return httpResponse.badRequest({ success: false, message: 'Nome, email, senha, CRECI, telefone e CPF são obrigatórios.' });
     }
 
     const existingUser = await authRepository.findUserByEmail(email);
@@ -57,7 +57,7 @@ const registerService = async (nome: string, email: string, senha: string, CRECI
 
     const hashedPassword = await bcrypt.hash(senha, 10);
 
-    const newUser = await authRepository.insertNewUser(nome, email, hashedPassword, CRECI, CPF);
+    const newUser = await authRepository.insertNewUser(nome, email, hashedPassword, CRECI, CPF, telefone);
 
     if (newUser) {
         return httpResponse.created({ success: true, message: 'Corretor registrado com sucesso!', user: newUser });

@@ -21,14 +21,14 @@ export const login = async (req: Request, res: Response) => {
 
 export const register = async (req: Request, res: Response) => {
     // Adicionado 'nome' como campo obrigatório para o cadastro
-    const { nome, email, senha, CRECI, CPF } = req.body; 
+    const { nome, email, senha, CRECI, CPF, telefone } = req.body; 
 
-    if (!nome || !email || !senha || !CRECI || !CPF) {
-        return res.status(400).json({ success: false, message: "Nome, email, senha, CRECI e CPF são obrigatórios para o cadastro." });
+    if (!nome || !email || !senha || !CRECI || !CPF || !telefone) {
+        return res.status(400).json({ success: false, message: "Nome, email, senha, CRECI, telefone e CPF são obrigatórios para o cadastro." });
     }
 
     try {
-        const httpResponse = await authService.registerService(nome, email, senha, CRECI, CPF);
+        const httpResponse = await authService.registerService(nome, email, senha, CRECI, CPF, telefone);
         res.status(httpResponse.statusCode).json(httpResponse.body);
     } catch (error) {
         console.error('Erro interno do servidor na rota de cadastro:', error);
