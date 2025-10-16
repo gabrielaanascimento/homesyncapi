@@ -15,6 +15,7 @@
   "dependencies": {
     "@google/genai": "^1.21.0",
     "bcrypt": "^6.0.0",
+    "cloudinary": "^2.7.0",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
@@ -22,7 +23,8 @@
     "multer": "^2.0.2",
     "nodemon": "^3.1.10",
     "pg": "^8.16.3",
-    "postgres": "^3.4.7"
+    "postgres": "^3.4.7",
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -32,6 +34,7 @@
     "@types/multer": "^2.0.0",
     "@types/node": "^24.4.0",
     "@types/pg": "^8.15.5",
+    "@types/streamifier": "^0.1.2",
     "tsx": "^3.12.7",
     "typescript": "^5.9.2"
   }
