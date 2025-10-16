@@ -51,7 +51,7 @@ ${JSON.stringify(imoveis)}
 
 2. A tarefa é analisar a pergunta do usuário e retornar apenas os imóveis relevantes com base na intenção da pergunta.
 
-3. Sua resposta DEVE ser exclusivamente um array JSON contendo apenas os IDs do campo "imovel_id" (inteiros) dos imóveis recomendados.
+3. Sua resposta DEVE ser exclusivamente um array JSON contendo apenas os IDs do campo "id" (inteiros) dos imóveis recomendados.
 - Exemplo de formato válido: [1, 5, 10]
 - Todos os IDs retornados devem existir na lista fornecida.
 
