@@ -4,7 +4,7 @@ import { AuthCorretorModel } from "../models/users-models.js";
 // Tabela 'usuarios' substituída por 'corretores'
 const findUserByEmail = async (email: string): Promise<AuthCorretorModel | null> => {
     const result = await db.query(
-        "SELECT id, nome, email, senha, creci FROM corretores WHERE email = $1", // Incluindo 'nome'
+        "SELECT id, nome, email, senha, creci, celular FROM corretores WHERE email = $1", // Incluindo 'celular'
         [email]
     );
     return result.rows[0] || null;

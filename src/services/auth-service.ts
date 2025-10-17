@@ -23,7 +23,8 @@ const loginService = async (email: string, senha: string): Promise<HttpResponse>
             userId: user.id, 
             email: user.email, 
             roles: ['corretor'], 
-            creci: user.CRECI
+            creci: user.CRECI,
+            telefone: user.celular
         };
         
         const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '1h' });
@@ -34,8 +35,13 @@ const loginService = async (email: string, senha: string): Promise<HttpResponse>
             success: true,
             message: 'Login bem-sucedido!', 
             token: token,
-            name: user.nome, // Agora retorna o nome real para a UI
-            id: user.id 
+            user: {
+                id: user.id,
+                name: user.nome,
+                email: user.email,
+                creci: user.CRECI,
+                telefone: user.celular
+            }
         });
 
     } else {

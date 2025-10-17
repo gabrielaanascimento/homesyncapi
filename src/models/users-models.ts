@@ -24,4 +24,5 @@ export interface AuthCorretorModel {
     senha?: string; // Hashed password
     CRECI: string; 
     nome: string; // Incluído para payload
+    celular: string; // Incluído para payload
 }
